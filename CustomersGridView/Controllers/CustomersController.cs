@@ -17,6 +17,7 @@ namespace CustomersGridView.Controllers
 
             return View(customers.ToList());
         }
+        // POST: Update Customer
         public ActionResult UpdateCustomer(Customer customer)
         {
             using (CustomersGridViewEntities entities = new CustomersGridViewEntities())
