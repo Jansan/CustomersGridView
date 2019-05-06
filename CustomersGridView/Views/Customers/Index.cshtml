@@ -1,0 +1,91 @@
+﻿@model IEnumerable<CustomersGridView.Models.Customer>
+@{
+    ViewBag.Title = "Index";
+    WebGrid webGrid = new WebGrid(source: Model, canPage: true, canSort: false);
+}
+   
+<h2>Index</h2>
+@webGrid.GetHtml(
+        htmlAttributes: new { @id = "WebGrid", @class = "Grid" },
+        columns: webGrid.Columns(
+                 webGrid.Column(header: "Customer Id", format: @<span class="label">@item.CustomerId</span>, style: "CustomerId"),
+webGrid.Column(header: "Name", format: @<span>
+                <span class="label">@item.Name</span>
+                <input class="text" type="text" value="@item.Name" style="display:none" />
+            </span>, style: "Name"),
+webGrid.Column(header: "Country", format: @<span>
+            <span class="label">@item.Country</span>
+            <input class="text" type="text" value="@item.Country" style="display:none" />
+        </span>, style: "Country"),
+webGrid.Column(format:@<span class="link">
+        <a class="Edit" href="javascript:;">Edit</a>
+        <a class="Update" href="javascript:;" style="display:none">Update</a>
+        <a class="Cancel" href="javascript:;" style="display:none">Cancel</a>
+    </span>)))
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script type="text/javascript">
+
+        //Edit event handler.
+        $("body").on("click", "#WebGrid TBODY .Edit", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find(".text").length > 0) {
+                    $(this).find(".text").show();
+                    $(this).find(".label").hide();
+                }
+            });
+            row.find(".Update").show();
+            row.find(".Cancel").show();
+            $(this).hide();
+        });
+
+        //Update event handler.
+        $("body").on("click", "#WebGrid TBODY .Update", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find(".text").length > 0) {
+                    var span = $(this).find(".label");
+                    var input = $(this).find(".text");
+                    span.html(input.val());
+                    span.show();
+                    input.hide();
+                }
+            });
+            row.find(".Edit").show();
+            row.find(".Cancel").hide();
+            $(this).hide();
+
+            var customer = {};
+            customer.CustomerId = row.find(".CustomerId").find(".label").html();
+            customer.Name = row.find(".Name").find(".label").html();
+            customer.Country = row.find(".Country").find(".label").html();
+            $.ajax({
+                type: "POST",
+                url: "/Home/UpdateCustomer",
+                data: '{customer:' + JSON.stringify(customer) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            });
+        });
+
+        //Cancel event handler.
+        $("body").on("click", "#WebGrid TBODY .Cancel", function () {
+            var row = $(this).closest("tr");
+            $("td", row).each(function () {
+                if ($(this).find(".text").length > 0) {
+                    var span = $(this).find(".label");
+                    var input = $(this).find(".text");
+                    input.val(span.html());
+                    span.show();
+                    input.hide();
+                }
+            });
+            row.find(".Edit").show();
+            row.find(".Update").hide();
+            $(this).hide();
+        });
+</script>
+
+

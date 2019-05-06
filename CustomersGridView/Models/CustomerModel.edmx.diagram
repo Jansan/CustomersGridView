@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="a9957ce9ebdc45788e9ad0f15455c297" Name="Diagram1">
-        <EntityTypeShape EntityType="CustomersGridViewModel.Customer" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CustomersGridViewModel.Customer" Width="5" PointX="4.125" PointY="2.125" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
